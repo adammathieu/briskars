@@ -25,3 +25,11 @@ flask shell
 app
 db
 ```
+
+## start server
+
+```
+flask run
+```
+
+open http://localhost:5000/

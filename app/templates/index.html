@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Bon vent, {{ user.username }}!</h1>
+    <h1>Bon vent, {{ current_user.username }}!</h1>
     {% for list in lists %}
     <div><p>{{ list.author.username }} a créé une bande: <b>{{ list.name }}, {{list.faction}}, format {{list.format}}</b></p></div>
     {% endfor %}
