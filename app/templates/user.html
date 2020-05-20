@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>User: {{ user.username }}</h1>
+    <hr>
+    {% for band in bands %}
+    <p>
+    [{{ band.faction }}][{{ band.format }} PO] <b>{{ band.name }}</b>
+    </p>
+    {% endfor %}
+{% endblock %}

@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Bon vent, {{ current_user.username }}!</h1>
-    {% for list in lists %}
-    <div><p>{{ list.author.username }} a créé une bande: <b>{{ list.name }}, {{list.faction}}, format {{list.format}}</b></p></div>
+    <h1>Salut à toi, {{ current_user.username }}!</h1>
+    {% for band in bands %}
+    <div>
+        <p>[{{band.faction}}][{{band.format}}] <b>{{ band.name }}</b> par {{ band.author.username }}.</p> 
+    </div>
     {% endfor %}
 {% endblock %}

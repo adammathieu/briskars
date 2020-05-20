@@ -1,27 +1,27 @@
 from flask import render_template, flash, redirect, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from app import app, db
-from app.forms import LoginForm, RegistrationForm
-from app.models import User
+from app.forms import LoginForm, RegistrationForm, BandForm
+from app.models import User, Band
 
 @app.route('/')
 @app.route('/index')
 def index():
-    lists = [
+    bands = [
         {
             'author': {'username': 'Garag'},
             'name': 'La bande à Dudule',
             'faction': 'Sundars',
-            'format': '1000 PO'
+            'format': 500
         },
         {
             'author': {'username': 'Manu'},
             'name': 'Le Cartel de Nachos de la Riviera',
             'faction': 'Quintors',
-            'format': '400 PO'
+            'format': 400
         }
     ]
-    return render_template('index.html', title='Briskars', lists=lists)
+    return render_template('index.html', title='Briskars', bands=bands)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -55,3 +55,25 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    bands = [
+        {'author': user, 'name': 'Ma première bande Briskars #1', 'faction': 'Sundars', 'format': 500},
+        {'author': user, 'name': 'Bande tournoi TGCM Saison 3 #2', 'faction': 'Sundars', 'format': 500}
+    ]
+    return render_template('user.html', user=user, bands=bands)
+
+@app.route('/band', methods=['GET', 'POST'])
+@login_required
+def band():
+    form = BandForm()
+    if form.validate_on_submit():
+        band = Band(name=form.name.data, format=str(form.format.data), faction=form.faction.data.name,  author=current_user)
+        db.session.add(band)
+        db.session.commit()
+        flash('Nouvelle bande Briskars créée!')
+        return redirect(url_for('index'))
+    return render_template('band.html', title='Band', form=form)
